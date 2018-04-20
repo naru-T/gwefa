@@ -8,7 +8,7 @@ Bandwidth selection for GWEFA
 A function for automatic bandwidth selection to calibrate a GWEFA
 }
 \usage{
-bw_gwefa(data, vars,k=2,robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
+bw_gwefa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
                     n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "min_uniquenesses"))
 }
 %- maybe also 'usage' for other objects documented here.
@@ -31,6 +31,9 @@ the number of retained components; k must be less than the number of variables
 Description from GWmodel::gwpca.cv
 }
 
+  \item{scores}{
+the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
+}
   \item{robust}{
 if TRUE, robust GWPCA will be applied; otherwise basic GWPCA will be applied
 

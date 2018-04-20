@@ -10,7 +10,7 @@ This function finds the sum of uniquenesses score for a specified bandwidth for 
 
 }
 \usage{
-gwefa_uniquenesses_sum(bw, x, dp.locat, k, robust, kernel, adaptive , p, theta, longlat, dMat, vars, n.obs, fm, rotate)
+gwefa_uniquenesses_sum(bw, x, dp.locat, k, robust, kernel, adaptive , p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -94,6 +94,9 @@ Description from psych::fa
 
 Description from psych::fa
 }
+
+  \item{scores}{
+the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
 
 }
 \details{
