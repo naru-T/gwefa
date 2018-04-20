@@ -1,0 +1,4 @@
+exportPattern("^[[:alpha:]]+")
+import(sp)
+import(GWmodel)
+import(psych)
