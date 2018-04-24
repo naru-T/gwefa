@@ -9,7 +9,7 @@ A function for automatic bandwidth selection to calibrate a GWEFA
 }
 \usage{
 bw_gwefa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
-                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "min_uniquenesses"))
+                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "min_uniquenesses","residual_sum"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -97,8 +97,8 @@ Description from psych::fa
 Three options in "cv_score","cv_uniquenesses", "min_uniquenesses", but now "min_uniquenesses" is only available.
 "cv_score" is based on the calculation of leave-one-out of cross validation of factor score.
 "cv_uniquenesses" is based on the calculation of leave-one-out of cross validation of factor uniquenesses.
-"min_uniquenesses" is optimized to detect the minumum value of the sum of factor uniquenesses.
-
+"min_uniquenesses" is optimized to detect the minumum value of the sum of squared factor uniquenesses.
+"residual_sum" is optimized to detect the minumum value of the sum of squared residuals.
 }
 
 }
