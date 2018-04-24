@@ -70,6 +70,7 @@ gwefa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
     warning("Invalid variables have been specified, please check them again!")
 
   load <- array(NA,c(ep.n,var.n,k))
+  resid_sqsum <- rep(NA, nrow(elocat))
   s <- matrix(NA,ep.n,k)
   u <- matrix(NA,ep.n,var.n)
   ld <- matrix(NA,ep.n,k)
@@ -110,6 +111,7 @@ gwefa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
     ld[i,]<- temp$Vaccounted[1,]
     ss[i,] <- temp$Vaccounted[2,]
     cor.mt[i,] <- temp$r.scores[upper.tri(temp$r.scores)]
+    resid_sqsum[i] <- sum(temp$residual[upper.tri(temp$residual)]^2, na.rm=TRUE)
     rmsea[i] <- temp$RMSEA[1]
   }
   dimnames(load)[[3]] <- paste0("Factor",1:k)
@@ -118,6 +120,7 @@ gwefa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
     score=s,
     uniquenesses=u,
     loading_score=ld,
+    residuals_sqsum = resid_sqsum,
     ss=ss,
     cor.mt=cor.mt,
     rmsea=rmsea)

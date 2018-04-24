@@ -1,5 +1,5 @@
 bw_gwefa <- function(data, vars,k=2, scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
-                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "min_uniquenesses")){
+                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "min_uniquenesses","residual_sum")){
 
   requireNamespace("GWmodel")
   requireNamespace("psych")
@@ -81,6 +81,13 @@ bw_gwefa <- function(data, vars,k=2, scores, robust=FALSE, kernel, adaptive=TRUE
     bw <- gold(gwefa_score_cv, lower, upper, adapt.bw = adaptive, x,
                dp.locat, k,  robust, kernel, adaptive, p, theta, longlat,
                dMat, vars,fm=fm,rotate=rotate,scores=scores)
-  }
+  } else if (type=="residual_sum"){
+
+    bw <- gold(gwefa_residual_sum, lower, upper, adapt.bw = adaptive, x,
+               dp.locat, k,  robust, kernel, adaptive, p, theta, longlat,
+               dMat, vars,fm=fm,rotate=rotate,scores=scores)
+  } else {bw <- NA }
+
+
   bw
 }
