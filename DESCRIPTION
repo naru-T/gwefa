@@ -1,7 +1,7 @@
-Package: gwefa
+Package: gwfa
 Type: Package
-Title: Geographically Weighted Explanatory Factor Analysis
-Version: 0.2.0
+Title: Geographically Weighted Factor Analysis
+Version: 0.3.0
 Author: N. Tsutsumida...
 Maintainer:  N. Tsutsumida <naru@kais.kyoto-u.ac.jp>
 Description: Implementation of a Geographically Weighted Explanatory Factor Analysis for sp data

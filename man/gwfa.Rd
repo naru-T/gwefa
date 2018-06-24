@@ -22,9 +22,8 @@ a Spatial*DataFrame either SpatialPointsDataFrame or SpatialPolygonsDataFrame as
 
 }
   \item{elocat}{
-a two-column numeric array or Spatial*DataFrame object for providing evaluation locations, i.e. SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp.
+Same as GWmodel::gwpcaa. two-column numeric array or Spatial*DataFrame object for providing evaluation locations, i.e. SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp.
 
-Description from GWmodel::gwpca
 }
   \item{vars}{
 the number of retained components; k must be less than the number of variables.
@@ -32,14 +31,13 @@ the number of retained components; k must be less than the number of variables.
 
 }
   \item{kernel}{
-function chosen as follows:
+Same as GWmodel::gwpca. Function chosen as follows:
 gaussian: wgt = exp(-.5*(vdist/bw)^2);
 exponential: wgt = exp(-vdist/bw);
 bisquare: wgt = (1-(vdist/bw)^2)^2 if vdist < bw, wgt=0 otherwise;
 tricube: wgt = (1-(vdist/bw)^3)^3 if vdist < bw, wgt=0 otherwise;
 boxcar: wgt=1 if dist < bw, wgt=0 otherwise
 
-Description from GWmodel::gwpca
 see help(GWmodel::gw.weight) more detail.
 }
  \item{adaptive}{
@@ -76,120 +74,96 @@ Number of observations used to find the correlation matrix if using a correlatio
 
 }
   \item{fm}{
-Factoring method fm="minres" will do a minimum residual as will fm="uls". Both of these use a first derivative. fm="ols" differs very slightly from "minres" in that it minimizes the entire residual matrix using an OLS procedure but uses the empirical first derivative. This will be slower. fm="wls" will do a weighted least squares (WLS) solution, fm="gls" does a generalized weighted least squares (GLS), fm="pa" will do the principal factor solution, fm="ml" will do a maximum likelihood factor analysis. fm="minchi" will minimize the sample size weighted chi square when treating pairwise correlations with different number of subjects per pair. fm ="minrank" will do a minimum rank factor analysis. "old.min" will do minimal residual the way it was done prior to April, 2017 (see discussion below). fm="alpha" will do alpha factor analysis as described in Kaiser and Coffey (1965).
+Same as psych::fa.Factoring method fm="minres" will do a minimum residual as will fm="uls". Both of these use a first derivative. fm="ols" differs very slightly from "minres" in that it minimizes the entire residual matrix using an OLS procedure but uses the empirical first derivative. This will be slower. fm="wls" will do a weighted least squares (WLS) solution, fm="gls" does a generalized weighted least squares (GLS), fm="pa" will do the principal factor solution, fm="ml" will do a maximum likelihood factor analysis. fm="minchi" will minimize the sample size weighted chi square when treating pairwise correlations with different number of subjects per pair. fm ="minrank" will do a minimum rank factor analysis. "old.min" will do minimal residual the way it was done prior to April, 2017 (see discussion below). fm="alpha" will do alpha factor analysis as described in Kaiser and Coffey (1965).
 
-Description from psych::fa
+
 }
   \item{rotate}{
-"none", "varimax", "quartimax", "bentlerT", "equamax", "varimin", "geominT" and "bifactor" are orthogonal rotations. "Promax", "promax", "oblimin", "simplimax", "bentlerQ, "geominQ" and "biquartimin" and "cluster" are possible oblique transformations of the solution. The default is to do a oblimin transformation, although versions prior to 2009 defaulted to varimax. SPSS seems to do a Kaiser normalization before doing Promax, this is done here by the call to "promax" which does the normalization before calling Promax in GPArotation.
+Same as psych::fa. "none", "varimax", "quartimax", "bentlerT", "equamax", "varimin", "geominT" and "bifactor" are orthogonal rotations. "Promax", "promax", "oblimin", "simplimax", "bentlerQ, "geominQ" and "biquartimin" and "cluster" are possible oblique transformations of the solution. The default is to do a oblimin transformation, although versions prior to 2009 defaulted to varimax. SPSS seems to do a Kaiser normalization before doing Promax, this is done here by the call to "promax" which does the normalization before calling Promax in GPArotation.
 
-Description from psych::fa
 }
   \item{n.iter}{
-Number of bootstrap interations to do in fa or fa.poly
-
-Description from psych::fa
+Same as psych::fa. Number of bootstrap interations to do in fa or fa.poly
 
 }
   \item{residuals}{
-Should the residual matrix be shown
+Same as psych::fa. Should the residual matrix be shown
 
-Description from psych::fa
 }
 
   \item{scores}{
-the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
+Same as psych::fa. The default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
 
-
-Description from psych::fa
 }
   \item{SMC}{
-Use squared multiple correlations (SMC=TRUE) or use 1 as initial communality estimate. Try using 1 if imaginary eigen values are reported. If SMC is a vector of length the number of variables, then these values are used as starting values in the case of fm='pa'.
+Same as psych::fa. Use squared multiple correlations (SMC=TRUE) or use 1 as initial communality estimate. Try using 1 if imaginary eigen values are reported. If SMC is a vector of length the number of variables, then these values are used as starting values in the case of fm='pa'.
 
-Description from psych::fa
 }
   \item{covar}{
-if covar is TRUE, factor the covariance matrix, otherwise factor the correlation matrix
+Same as psych::fa. If covar is TRUE, factor the covariance matrix, otherwise factor the correlation matrix
 
-Description from psych::fa
 }
   \item{missing}{
-if scores are TRUE, and missing=TRUE, then impute missing values using either the median or the mean
+Same as psych::fa. If scores are TRUE, and missing=TRUE, then impute missing values using either the median or the mean
 
-Description from psych::fa
 }
   \item{impute}{
-"median" or "mean" values are used to replace missing values
+Same as psych::fa."median" or "mean" values are used to replace missing values
 
-Description from psych::fa
 }
   \item{min.err}{
-Iterate until the change in communalities is less than min.err
+Same as psych::fa. Iterate until the change in communalities is less than min.err
 
-Description from psych::fa
 }
   \item{max.iter}{
-Maximum number of iterations for convergence
+Same as psych::fa. Maximum number of iterations for convergence
 
-Description from psych::fa
 }
 
   \item{symmetric}{
-symmetric=TRUE forces symmetry by just looking at the lower off diagonal values
+Same as psych::fa. Symmetric=TRUE forces symmetry by just looking at the lower off diagonal values.
 
-Description from psych::fa
 }
   \item{warnings}{
-warnings=TRUE => warn if number of factors is too many
+Same as psych::fa. warnings=TRUE => warn if number of factors is too many
 
-Description from psych::fa
 }
   \item{alpha}{
-alpha level for the confidence intervals for RMSEA
+Same as psych::fa. Alpha level for the confidence intervals for RMSEA
 
-Description from psych::fa
 }
   \item{pr}{
+Same as psych::fa. If doing iterations to find confidence intervals, what probability values should be found for the confidence intervals
 
-if doing iterations to find confidence intervals, what probability values should be found for the confidence intervals
-
-Description from psych::fa
 }
   \item{oblique.scores}{
-When factor scores are found, should they be based on the structure matrix (default) or the pattern matrix (oblique.scores=TRUE). Now it is always false. If you want oblique factor scores, use tenBerge.
+Same as psych::fa. When factor scores are found, should they be based on the structure matrix (default) or the pattern matrix (oblique.scores=TRUE). Now it is always false. If you want oblique factor scores, use tenBerge.
 
-Description from psych::fa
 }
   \item{weight}{
-If not NULL, a vector of length n.obs that contains weights for each observation. The NULL case is equivalent to all cases being weighted 1.
+Same as psych::fa. If not NULL, a vector of length n.obs that contains weights for each observation. The NULL case is equivalent to all cases being weighted 1.
 
-Description from psych::fa
 }
   \item{np.obs}{
-The pairwise number of observations. Used if using a correlation matrix and asking for a minchi solution.
+Same as psych::fa. The pairwise number of observations. Used if using a correlation matrix and asking for a minchi solution.
 
-Description from psych::fa
 }
   \item{use}{
-How to treat missing data, use="pairwise" is the default". See cor for other options.
+Same as psych::fa. How to treat missing data, use="pairwise" is the default". See cor for other options.
 
-Description from psych::fa
 }
   \item{cor}{
-How to find the correlations: "cor" is Pearson", "cov" is covariance, "tet" is tetrachoric, "poly" is polychoric, "mixed" uses mixed cor for a mixture of tetrachorics, polychorics, Pearsons, biserials, and polyserials, Yuleb is Yulebonett, Yuleq and YuleY are the obvious Yule coefficients as appropriate
+Same as psych::fa. How to find the correlations: "cor" is Pearson", "cov" is covariance, "tet" is tetrachoric, "poly" is polychoric, "mixed" uses mixed cor for a mixture of tetrachorics, polychorics, Pearsons, biserials, and polyserials, Yuleb is Yulebonett, Yuleq and YuleY are the obvious Yule coefficients as appropriate
 
-Description from psych::fa
 }
   \item{correct}{
-When doing tetrachoric, polycoric, or mixed cor, how should we treat empty cells. (See the discussion in the help for tetrachoric.)
+Same as psych::fa. When doing tetrachoric, polycoric, or mixed cor, how should we treat empty cells. (See the discussion in the help for tetrachoric.)
 
-Description from psych::fa
 }
 
   \item{...}{
-additional parameters, specifically, keys may be passed if using the target rotation, or delta if using geominQ, or whether to normalize if using Varimax
+Same as psych::fa. Additional parameters, specifically, keys may be passed if using the target rotation, or delta if using geominQ, or whether to normalize if using Varimax
 
-Description from psych::fa
 }
 
 }
@@ -320,5 +294,5 @@ N. Tsutsumida,...
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ spatial }% use one of  RShowDoc("KEYWORDS")
-\keyword{ multivariate }% __ONLY ONE__ keyword per line
+\keyword{ "SPATIAL" }% use one of  RShowDoc("KEYWORDS")
+\keyword{ "MULTIVALIATE" }% __ONLY ONE__ keyword per line
