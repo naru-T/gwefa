@@ -1,7 +1,7 @@
-gwefa_score_cv <- function(bw, x, dp.locat,k, robust, scores, kernel, adaptive=TRUE, p, theta, longlat, dMat,
-                               vars, n.obs = NA,  fm, rotate) {
+gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, robust, kernel, adaptive, p, theta, longlat, dMat,
+                                    vars,  n.obs = NA,fm, rotate) {
 
-##This function is based on GWmodel::gwpca.cv.
+ ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
   requireNamespace("psych")
 
@@ -65,7 +65,7 @@ gwefa_score_cv <- function(bw, x, dp.locat,k, robust, scores, kernel, adaptive=T
   if (len.var > var.n)
     warning("Invalid variables have been specified, please check them again!")
 
-  temp0 <- fa(x,nfactors = k,fm=fm,scores=scores, rotate=rotate, residuals=T, scores = T, control)
+  temp0 <- fa(x,nfactors = k,fm=fm,rotate=rotate, scores=scores, residuals=T)
 
   cv <- c()
   for (i in 1:ep.n) {
@@ -90,8 +90,8 @@ gwefa_score_cv <- function(bw, x, dp.locat,k, robust, scores, kernel, adaptive=T
       next
     }
     wt[i] <- 0
-    temp1 <- wefa(x=data, wt, factors=k, n.obs,fm, rotate)
-    cv[i] <- sum((temp0$scores[i, ] - temp1$scores[i, ]))**2
+    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate)
+    cv[i] <- sum((temp0$uniquenesses - temp1$uniquenesses))**2
 
   }
   sum(cv)

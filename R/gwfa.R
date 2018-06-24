@@ -1,4 +1,4 @@
-gwefa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat=NULL,
+gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat=NULL,
                   n.obs = NA, n.iter=1, rotate="oblimin", scores="regression",
                   residuals=FALSE, SMC=TRUE, covar=FALSE,missing=FALSE,impute="median",
                   min.err = 0.001,  max.iter = 50,symmetric=TRUE, warnings=TRUE, fm="minres",
@@ -101,7 +101,7 @@ gwefa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
       next
     }
 
-    temp <- wefa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate)
+    temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate)
 
     load[i,,] <- matrix(temp$loadings, ncol=k, nrow=var.n)
     #score

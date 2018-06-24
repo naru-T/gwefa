@@ -1,14 +1,14 @@
-\name{gwefa}
-\alias{gwefa}
+\name{gwfa}
+\alias{gwfa}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Geographically Weighted Explanatory Factor Analysis
+Geographically Weighted Factor Analysis
 }
 \description{
-This function implements GWEFA.
+This function implements GWFA. most of description in this manual from Description from GWmodel::gwpca or psych::fa.
 }
 \usage{
-gwefa(data, elocat, vars, bw, k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat=NULL,
+gwfa(data, elocat, vars, bw, k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat=NULL,
                  n.obs = NA, n.iter=1, rotate="oblimin", scores="regression",
                   residuals=FALSE, SMC=TRUE, covar=FALSE,missing=FALSE,impute="median",
                   min.err = 0.001,  max.iter = 50,symmetric=TRUE, warnings=TRUE, fm="minres",
@@ -18,9 +18,8 @@ gwefa(data, elocat, vars, bw, k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data}{
-a Spatial*DataFrame, i.e. SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp.
+a Spatial*DataFrame either SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp.
 
-Description from GWmodel::gwpca
 }
   \item{elocat}{
 a two-column numeric array or Spatial*DataFrame object for providing evaluation locations, i.e. SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp.
@@ -30,7 +29,7 @@ Description from GWmodel::gwpca
   \item{vars}{
 the number of retained components; k must be less than the number of variables.
 
-Description from GWmodel::gwpca
+
 }
   \item{kernel}{
 function chosen as follows:
@@ -46,43 +45,35 @@ see help(GWmodel::gw.weight) more detail.
  \item{adaptive}{
  if TRUE calculate an adaptive kernel where the bandwidth corresponds to the number of nearest neighbours (i.e. adaptive distance); default is FALSE, where a fixed kernel is found (bandwidth is a fixed distance).
 
-Description from GWmodel::gwpca
 }
   \item{bw}{
 bandwidth used in the weighting function, possibly calculated by bw.gwpca;fixed (distance) or adaptive bandwidth(number of nearest neighbours).
 
-Description from GWmodel::gwpca
 }
   \item{k}{
 the number of retained components; k must be less than the number of variables
 
-Description from GWmodel::gwpca
 }
 
   \item{p}{
 the power of the Minkowski distance, default is 2, i.e. the Euclidean distance.
 
-Description from GWmodel::gwpca
 }
   \item{theta}{
 an angle in radians to rotate the coordinate system, default is 0.
 
-Description from GWmodel::gwpca
 }
   \item{longlat}{
 if TRUE, great circle distances will be calculated.
 
-Description from GWmodel::gwpca
 }
   \item{dMat}{
 a pre-specified distance matrix, it can be calculated by the function gw.dist .
 
-Description from GWmodel::gwpca
 }
   \item{n.obs}{
 Number of observations used to find the correlation matrix if using a correlation matrix. Used for finding the goodness of fit statistics. Must be specified if using a correlaton matrix and finding confidence intervals.
 
-Description from psych::fa
 }
   \item{fm}{
 Factoring method fm="minres" will do a minimum residual as will fm="uls". Both of these use a first derivative. fm="ols" differs very slightly from "minres" in that it minimizes the entire residual matrix using an OLS procedure but uses the empirical first derivative. This will be slower. fm="wls" will do a weighted least squares (WLS) solution, fm="gls" does a generalized weighted least squares (GLS), fm="pa" will do the principal factor solution, fm="ml" will do a maximum likelihood factor analysis. fm="minchi" will minimize the sample size weighted chi square when treating pairwise correlations with different number of subjects per pair. fm ="minrank" will do a minimum rank factor analysis. "old.min" will do minimal residual the way it was done prior to April, 2017 (see discussion below). fm="alpha" will do alpha factor analysis as described in Kaiser and Coffey (1965).
@@ -212,7 +203,7 @@ Factor loadings will be smaller than component loadings for the later reflect un
 
 The fa function will do factor analyses using one of six different algorithms: minimum residual (minres, aka ols, uls), principal axes, alpha factoring, weighted least squares, minimum rank, or maximum likelihood.
 
-Principal axes factor analysis has a long history in exploratory analysis and is a straightforward procedure. Successive eigen value decompositions are done on a correlation matrix with the diagonal replaced with diag (FF') until ∑(diag(FF')) does not change (very much). The current limit of max.iter =50 seems to work for most problems, but the Holzinger-Harmon 24 variable problem needs about 203 iterations to converge for a 5 factor solution.
+Principal axes factor analysis has a long history in exploratory analysis and is a straightforward procedure. Successive eigen value decompositions are done on a correlation matrix with the diagonal replaced with diag (FF') until \sum(diag(FF')) does not change (very much). The current limit of max.iter =50 seems to work for most problems, but the Holzinger-Harmon 24 variable problem needs about 203 iterations to converge for a 5 factor solution.
 
 Not all factor programs that do principal axes do iterative solutions. The example from the SAS manual (Chapter 33) is such a case. To achieve that solution, it is necessary to specify that the max.iter = 1. Comparing that solution to an iterated one (the default) shows that iterations improve the solution.
 

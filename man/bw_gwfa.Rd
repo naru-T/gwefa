@@ -1,44 +1,45 @@
-\name{gwefa_uniquenesses_sum}
-\alias{gwefa_uniquenesses_sum}
+\name{bw_gwfa}
+\alias{bw_gwfa}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Calculate Detection of the minimum uniquenesses for a specified bandwidth for GWEFA
-
+\title{
+Bandwidth selection for GWFA
 }
 \description{
-This function finds the sum of uniquenesses score for a specified bandwidth for GWEFA. It can be used to construct the bandwidth function across all possible bandwidths and compared to that found automatically via bw_gwefa function.
-
-
+A function for automatic bandwidth selection to calibrate a GWFA
 }
 \usage{
-gwefa_uniquenesses_sum(bw, x, dp.locat, k, robust, kernel, adaptive , p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores)
+bw_gwfa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
+                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "min_uniquenesses","residual_sum"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{bw}{
-bandwidth used in the weighting function;fixed (distance) or adaptive bandwidth(number of nearest neighbours)
-
-Description from GWmodel::gwpca.cv
-}
-  \item{x}{
-a Spatial*DataFrame, i.e. SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp.
+  \item{data}{
+a Spatial*DataFrame, i.e. SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp
 
 Description from GWmodel::gwpca
 }
-  \item{dp.locat}{
-a two-column numeric array of observation coordinates
 
-Description from GWmodel::gwpca.cv
+  \item{vars}{
+the number of retained components; k must be less than the number of variables.
+
+Description from GWmodel::gwpca
 }
+
   \item{k}{
 the number of retained components; k must be less than the number of variables
 
 Description from GWmodel::gwpca.cv
+}
+
+  \item{scores}{
+the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
 }
   \item{robust}{
 if TRUE, robust GWPCA will be applied; otherwise basic GWPCA will be applied
 
 Description from GWmodel::gwpca.cv
 }
+
   \item{kernel}{
 function chosen as follows:
 gaussian: wgt = exp(-.5*(vdist/bw)^2);
@@ -49,6 +50,7 @@ boxcar: wgt=1 if dist < bw, wgt=0 otherwise
 
 Description from GWmodel::gwpca.cv
 }
+
   \item{adaptive}{
 if TRUE calculate an adaptive kernel where the bandwidth (bw) corresponds to the number of nearest neighbours (i.e. adaptive distance); default is FALSE, where a fixed kernel is found (bandwidth is a fixed distance)
 
@@ -74,11 +76,7 @@ a pre-specified distance matrix, it can be calculated by the function gw.dist .
 
 Description from GWmodel::gwpca
 }
-  \item{vars}{
-the number of retained components; k must be less than the number of variables.
 
-Description from GWmodel::gwpca
-}
   \item{n.obs}{
 Number of observations used to find the correlation matrix if using a correlation matrix. Used for finding the goodness of fit statistics. Must be specified if using a correlaton matrix and finding confidence intervals.
 
@@ -95,15 +93,20 @@ Description from psych::fa
 Description from psych::fa
 }
 
-  \item{scores}{
-the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
+  \item{type}{
+Three options in "cv_score","cv_uniquenesses", "min_uniquenesses", but now "min_uniquenesses" is only available.
+"cv_score" is based on the calculation of leave-one-out of cross validation of factor score.
+"cv_uniquenesses" is based on the calculation of leave-one-out of cross validation of factor uniquenesses.
+"min_uniquenesses" is optimized to detect the minumum value of the sum of squared factor uniquenesses.
+"residual_sum" is optimized to detect the minumum value of the sum of squared residuals.
+}
 
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-Returns the summed factor uniquenesses.
+Returns the adaptive or fixed distance bandwidth.
 }
 \references{
   Isabella Gollini, Binbin Lu, Martin Charlton, Christopher Brunsdon, Paul Harris (2015). GWmodel:
@@ -120,9 +123,8 @@ Returns the summed factor uniquenesses.
 
 }
 \author{
-N. Tsutsumida,...
+N.Tsutsumida,...
 }
-
 \note{
 %%  ~~further notes~~
 }
@@ -138,16 +140,8 @@ N. Tsutsumida,...
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function (bw, x, dp.locat, k, robust, kernel, adaptive = TRUE,
-    p, theta, longlat = FALSE, dMat, vars, eloc = NA, elocat,
-    covmat = NULL, n.obs = NA, subset, na.action, start = NULL,
-    fm, rotate, control = NULL)
+function (x)
 {
-    ans <- gwefa(data = x, elocat = dp.locat, vars, bw, k = 2,
-        eloc = NA, kernel, adaptive = TRUE, p = 2, theta = 0,
-        longlat = FALSE, dMat, covmat = NULL, n.obs = NA, subset,
-        na.action, start = NULL, fm, rotate, control = NULL)
-    return(sum(ans$uniquenesses^2))
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

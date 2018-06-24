@@ -1,4 +1,4 @@
-wefa <- function(x, wt, factors, n.obs = NA, scores="regression", fm = "minres", rotate = "Promax", control = NULL, ...) {
+wfa <- function(x, wt, factors, n.obs = NA, scores="regression", fm = "minres", rotate = "Promax", control = NULL, ...) {
   ##This function is based on psych::fa
   requireNamespace("psych")
 
