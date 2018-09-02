@@ -1,4 +1,4 @@
-gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, robust, kernel, adaptive, p, theta, longlat, dMat,
+gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, robust, kernel, adaptive, p, theta, longlat, dMat,
                                     vars,  n.obs = NA,fm, rotate) {
 
  ##This function is based on GWmodel::gwpca.cv.
@@ -80,6 +80,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, robust, kernel,
                               theta = theta, longlat = longlat)
     }
     wt <- gw.weight(dist.vi, bw, kernel, adaptive)
+    wt[i] <- 0
     use <- wt > 0
     wt <- wt[use]
     if (length(wt) <= 5) {
@@ -89,10 +90,14 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, robust, kernel,
                     sep = ", "))
       next
     }
-    wt[i] <- 0
-    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate)
-    cv[i] <- sum((temp0$uniquenesses - temp1$uniquenesses))**2
 
+    tryCatch({ temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate)},
+                      error=function(e){ temp1 <- NULL})
+    if(is.null(temp1)){  
+      cv[i] <- NA
+    } else{
+    cv[i] <- sum((temp0$uniquenesses - temp1$uniquenesses))**2
+    }
   }
   sum(cv)
 }

@@ -1,41 +1,40 @@
-\name{bw_gwfa}
-\alias{bw_gwfa}
+\name{gwfa.Accumvar_max.calc}
+\alias{gwfa.Accumvar_max.calc}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-Bandwidth selection for GWFA
+\title{ Calculate Detection of the maximum of the minimum accumulated variation for a specified bandwidth for GWFA
+
 }
 \description{
-A function for automatic bandwidth selection to calibrate a GWFA
+This function finds the maximum of the minimum accumulated variation for a specified bandwidth for GWFA. It can be used to construct the bandwidth function across all possible bandwidths and compared to that found automatically via bw_gwfa function.
+
+
 }
 \usage{
-bw_gwfa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
-                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"))
+gwfa.Accumvar_max.calc(bw, x, dp.locat, k, robust, kernel, adaptive , p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{data}{
+  \item{bw}{
+bandwidth used in the weighting function;fixed (distance) or adaptive bandwidth(number of nearest neighbours)
+
+Description from GWmodel::gwpca.cv
+}
+  \item{x}{
 Same as GWmodel::gwpca. A Spatial*DataFrame, i.e. SpatialPointsDataFrame or SpatialPolygonsDataFrame as defined in package sp.
 
 }
-
-  \item{vars}{
-Same as GWmodel::gwpca.cv. The number of retained components; k must be less than the number of variables.
+  \item{dp.locat}{
+Same as GWmodel::gwpca.cv. A two-column numeric array of observation coordinates
 
 }
-
   \item{k}{
 Same as GWmodel::gwpca.cv. The number of retained components; k must be less than the number of variables
 
-}
-
-  \item{scores}{
-the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
 }
   \item{robust}{
 Same as GWmodel::gwpca.cv. If TRUE, robust GWPCA will be applied; otherwise basic GWPCA will be applied
 
 }
-
   \item{kernel}{
 Same as GWmodel::gwpca.cv. Function chosen as follows:
 gaussian: wgt = exp(-.5*(vdist/bw)^2);
@@ -45,7 +44,6 @@ tricube: wgt = (1-(vdist/bw)^3)^3 if vdist < bw, wgt=0 otherwise;
 boxcar: wgt=1 if dist < bw, wgt=0 otherwise
 
 }
-
   \item{adaptive}{
 Same as GWmodel::gwpca.cv. If TRUE calculate an adaptive kernel where the bandwidth (bw) corresponds to the number of nearest neighbours (i.e. adaptive distance); default is FALSE, where a fixed kernel is found (bandwidth is a fixed distance)
 
@@ -66,7 +64,10 @@ Same as GWmodel::gwpca. If TRUE, great circle distances will be calculated.
 Same as GWmodel::gwpca. A pre-specified distance matrix, it can be calculated by the function gw.dist .
 
 }
+  \item{vars}{
+Same as GWmodel::gwpca. The number of retained components; k must be less than the number of variables.
 
+}
   \item{n.obs}{
 Same as psych::fa. Number of observations used to find the correlation matrix if using a correlation matrix. Used for finding the goodness of fit statistics. Must be specified if using a correlaton matrix and finding confidence intervals.
 
@@ -80,21 +81,16 @@ Same as psych::fa. "none", "varimax", "quartimax", "bentlerT", "equamax", "varim
 
 }
 
-  \item{type}{
-Five options are available.
-"cv_score" is based on the calculation of leave-one-out cross validation of factor score.
-"cv_uniquenesses" is based on the calculation of leave-one-out cross validation of factor uniquenesses.
-"min_uniquenesses"  optimizes the bandwidth to detect the minumum value of the sum of squared factor uniquenesses.
-"residual_sum"  optimizes the bandwidth to detect the minumum value of the sum of squared residuals.
-"accumvar_max" optimizes the bandwidth to detect the maximum of the minimum accumulated variation.
-}
+  \item{scores}{
+the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
 
+}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-Returns the adaptive or fixed distance bandwidth.
+Returns the maximum of the minimum accumulated variation.
 }
 \references{
   Isabella Gollini, Binbin Lu, Martin Charlton, Christopher Brunsdon, Paul Harris (2015). GWmodel:
@@ -109,10 +105,12 @@ Returns the adaptive or fixed distance bandwidth.
   Revelle, W. (2017) psych: Procedures for Personality and Psychological Research, Northwestern
   University, Evanston, Illinois, USA, https://CRAN.R-project.org/package=psych Version = 1.7.8.
 
+  Tsutsumida N., Harris P., Comber A. (2017) The application of a geographically weighted principal components analysis for exploring 23 years of goat population change across Mongolia, Annals of the American Association of Geographers, 107(5) 1060-1074; doi:  http://dx.doi.org/10.1080/24694452.2017.1309968
 }
 \author{
-N.Tsutsumida,...
+N. Tsutsumida,...
 }
+
 \note{
 %%  ~~further notes~~
 }

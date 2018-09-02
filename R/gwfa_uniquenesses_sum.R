@@ -2,6 +2,6 @@ gwfa_uniquenesses_sum <- function(bw, x ,dp.locat, k, robust, kernel, adaptive, 
 
   ans <- gwfa(data=x,elocat=dp.locat, vars,bw,k, kernel, adaptive, p=2, theta=0, longlat, dMat, n.obs, fm, rotate,scores)
 
-  return(sum(ans$uniquenesses^2))
+  return(-sum(ans$uniquenesses^2))
 
 }

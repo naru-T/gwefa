@@ -1,4 +1,4 @@
-gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores, kernel, adaptive=TRUE, p, theta, longlat, dMat,
+gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, p, theta, longlat, dMat,
                                vars, n.obs = NA,  fm, rotate) {
 
 ##This function is based on GWmodel::gwpca.cv.
@@ -65,7 +65,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores, kernel, adaptive=TR
   if (len.var > var.n)
     warning("Invalid variables have been specified, please check them again!")
 
-  temp0 <- fa(x,nfactors = k,fm=fm,scores=scores,  rotate=rotate, residuals=T, scores = T, control)
+  temp0 <- fa(x,nfactors = k,fm=fm,scores=scores,  rotate=rotate, residuals=T)
 
   cv <- c()
   for (i in 1:ep.n) {
@@ -81,6 +81,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores, kernel, adaptive=TR
     }
     wt <- gw.weight(dist.vi, bw, kernel, adaptive)
     use <- wt > 0
+    wt[i] <- 0
     wt <- wt[use]
     if (length(wt) <= 5) {
       expr <- paste("Too small bandwidth at location: ",
@@ -89,10 +90,14 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores, kernel, adaptive=TR
                     sep = ", "))
       next
     }
-    wt[i] <- 0
-    temp1 <- wfa(x=data, wt, factors=k, n.obs,fm, rotate)
-    cv[i] <- sum((temp0$scores[i, ] - temp1$scores[i, ]))**2
 
+    tryCatch({ temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate)},
+             error=function(e){ temp1 <- NULL})
+    if(is.null(temp1)){
+      cv[i] <- NA
+    } else{
+      cv[i] <- sum((temp0$scores[i, ] - temp1$scores[i, ]))**2
+      }
   }
   sum(cv)
 }

@@ -120,8 +120,9 @@ N. Tsutsumida,...
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-
+%% TBD
 }
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ "SPATIAL" }% use one of  RShowDoc("KEYWORDS")

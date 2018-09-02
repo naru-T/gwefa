@@ -101,20 +101,38 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       next
     }
 
-    temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate)
+    tryCatch({ temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate)},
+                     error=function(e){ temp <- NULL})
+    if(is.null(temp)){
+      load[i,,] <- NA
+      score.all[use, ] <- NA
+      s[i,] <- NA
+      u[i,] <- NA
+      ld[i,]<- NA
+      ss[i,] <- NA
+      cortemp <- NA
+      cor.mt[i,] <- NA
+      resid_sqsum[i] <- NA
+      rmsea[i] <- NA
 
-    load[i,,] <- matrix(temp$loadings, ncol=k, nrow=var.n)
+    } else {
+
+    colnm <- temp$scores %>% colnames()
+    load[i,,] <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
     #score
-    score.all[use, ] <- temp$scores
+
+    score.all[use, ] <- temp$scores[, order(colnm)]
     s[i,] <- score.all[i,]
     u[i,] <- temp$uniquenesses
-    ld[i,]<- temp$Vaccounted[1,]
-    ss[i,] <- temp$Vaccounted[2,]
-    cor.mt[i,] <- temp$r.scores[upper.tri(temp$r.scores)]
+    ld[i,]<- temp$Vaccounted[1,order(colnm)]
+    ss[i,] <- temp$Vaccounted[2,order(colnm)]
+    cortemp <- cor(temp$scores[,order(colnm)])
+    cor.mt[i,] <- cortemp[upper.tri(cortemp)] #correlation between factor scores
     resid_sqsum[i] <- sum(temp$residual[upper.tri(temp$residual)]^2, na.rm=TRUE)
     rmsea[i] <- temp$RMSEA[1]
+    }
   }
-  dimnames(load)[[3]] <- paste0("Factor",1:k)
+  dimnames(load)[[3]] <- colnames(temp$loadings)[order(colnames(temp$loadings))]
   list(
     loadings=load,
     score=s,
