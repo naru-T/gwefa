@@ -1,5 +1,5 @@
 gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, robust, kernel, adaptive, p, theta, longlat, dMat,
-                                    vars,  n.obs = NA,fm, rotate) {
+                                    vars,  n.obs = NA,fm, rotate,timeout) {
 
  ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
@@ -91,8 +91,8 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
       next
     }
 
-    tryCatch({ temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate)},
-                      error=function(e){ temp1 <- NULL})
+    temp1 <- tryCatch({R.utils::withTimeout(wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate),timeout)},
+                      error=function(e){ NULL})
     if(is.null(temp1)){  
       cv[i] <- NA
     } else{

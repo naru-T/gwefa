@@ -10,7 +10,8 @@ This function finds the maximum of the minimum accumulated variation for a speci
 
 }
 \usage{
-gwfa.Accumvar_max.calc(bw, x, dp.locat, k, robust, kernel, adaptive , p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores)
+gwfa.Accumvar_max.calc(bw, x, dp.locat, k, robust, kernel, adaptive,
+p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores,timeout)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -83,6 +84,9 @@ Same as psych::fa. "none", "varimax", "quartimax", "bentlerT", "equamax", "varim
 
   \item{scores}{
 the default="regression" finds factor scores using regression. Alternatives for estimating factor scores include simple regression ("Thurstone"), correlaton preserving ("tenBerge") as well as "Anderson" and "Bartlett" using the appropriate algorithms ( factor.scores). Although scores="tenBerge" is probably preferred for most solutions, it will lead to problems with some improper correlation matrices.
+}
+  \item{timeout}{
+A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
 
 }
 }

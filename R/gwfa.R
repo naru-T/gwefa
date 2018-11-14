@@ -3,12 +3,13 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
                   residuals=FALSE, SMC=TRUE, covar=FALSE,missing=FALSE,impute="median",
                   min.err = 0.001,  max.iter = 50,symmetric=TRUE, warnings=TRUE, fm="minres",
                   alpha=.1,pr=.05,oblique.scores=FALSE,np.obs=NULL,use="pairwise",cor="cor",
-                  correct=.5,weight=NULL,...) {
+                  correct=.5,weight=NULL, timeout,...) {
 
 
 ##This function is based on GWmodel::gwpca and psych::fa
   requireNamespace("GWmodel")
   requireNamespace("psych")
+  requireNamespace("R.utils")
 
   if (is(data, "Spatial")) {
     p4s <- proj4string(data)
@@ -101,8 +102,10 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       next
     }
 
-    tryCatch({ temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate)},
+    tryCatch({ R.utils::withTimeout(temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate),
+                                    timeout)},
                      error=function(e){ temp <- NULL})
+    
     if(is.null(temp)){
       load[i,,] <- NA
       score.all[use, ] <- NA
@@ -117,7 +120,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
 
     } else {
 
-    colnm <- temp$scores %>% colnames()
+    colnm <- colnames(temp$scores)
     load[i,,] <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
     #score
 

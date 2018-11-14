@@ -10,7 +10,8 @@ This function finds the leave-one-out cross validation of scores to specify band
 
 }
 \usage{
-gwfa_score_cv(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, p, theta, longlat, dMat, vars, n.obs = NA,  fm, rotate)
+gwfa_score_cv(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, 
+p, theta, longlat, dMat, vars, n.obs = NA,  fm, rotate, timeout)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -81,9 +82,10 @@ Same as psych::fa. Factoring method fm="minres" will do a minimum residual as wi
 }
   \item{rotate}{
 Same as psych::fa. "none", "varimax", "quartimax", "bentlerT", "equamax", "varimin", "geominT" and "bifactor" are orthogonal rotations. "Promax", "promax", "oblimin", "simplimax", "bentlerQ, "geominQ" and "biquartimin" and "cluster" are possible oblique transformations of the solution. The default is to do a oblimin transformation, although versions prior to 2009 defaulted to varimax. SPSS seems to do a Kaiser normalization before doing Promax, this is done here by the call to "promax" which does the normalization before calling Promax in GPArotation.
-
 }
-
+  \item{timeout}{
+A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
+}
 
 }
 \details{

@@ -1,5 +1,5 @@
 gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, p, theta, longlat, dMat,
-                               vars, n.obs = NA,  fm, rotate) {
+                               vars, n.obs = NA,  fm, rotate,timeout) {
 
 ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
@@ -91,8 +91,8 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
       next
     }
 
-    tryCatch({ temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate)},
-             error=function(e){ temp1 <- NULL})
+    temp1 <- tryCatch({R.utils::withTimeout( wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate), timeout)},
+             error=function(e){ NULL})
     if(is.null(temp1)){
       cv[i] <- NA
     } else{

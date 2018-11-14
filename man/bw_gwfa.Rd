@@ -8,8 +8,8 @@ Bandwidth selection for GWFA
 A function for automatic bandwidth selection to calibrate a GWFA
 }
 \usage{
-bw_gwfa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
-                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"))
+bw_gwfa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat, n.obs = NA,fm, rotate, 
+type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"),timeout)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -89,6 +89,10 @@ Five options are available.
 "accumvar_max" optimizes the bandwidth to detect the maximum of the minimum accumulated variation.
 }
 
+ \item{timeout}{
+A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
+
+}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

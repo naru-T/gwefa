@@ -13,7 +13,7 @@ gwfa(data, elocat, vars, bw, k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=F
                   residuals=FALSE, SMC=TRUE, covar=FALSE,missing=FALSE,impute="median",
                   min.err = 0.001,  max.iter = 50,symmetric=TRUE, warnings=TRUE, fm="minres",
                   alpha=.1,pr=.05,oblique.scores=FALSE,np.obs=NULL,use="pairwise",cor="cor",
-                  correct=.5,weight=NULL,...)
+                  correct=.5,weight=NULL,timeout,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -160,7 +160,10 @@ Same as psych::fa. How to find the correlations: "cor" is Pearson", "cov" is cov
 Same as psych::fa. When doing tetrachoric, polycoric, or mixed cor, how should we treat empty cells. (See the discussion in the help for tetrachoric.)
 
 }
+  \item{timeout}{
+A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
 
+}
   \item{...}{
 Same as psych::fa. Additional parameters, specifically, keys may be passed if using the target rotation, or delta if using geominQ, or whether to normalize if using Varimax
 
