@@ -103,7 +103,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
     }
 
     temp <- tryCatch({ R.utils::withTimeout(wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate),
-                                    timeout)},
+                                    timeout=timeout)},
                      error=function(e){ NULL})
     
     if(is.null(temp)){
