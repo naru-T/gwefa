@@ -9,7 +9,7 @@ A function for automatic bandwidth selection to calibrate a GWFA
 }
 \usage{
 bw_gwfa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat, n.obs = NA,fm, rotate, 
-type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"),timeout)
+type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"),oblique.scores, timeout)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -88,7 +88,9 @@ Five options are available.
 "residual_sum"  optimizes the bandwidth to detect the minumum value of the sum of squared residuals.
 "accumvar_max" optimizes the bandwidth to detect the maximum of the minimum accumulated variation.
 }
-
+ \item{oblique.scores}{
+ When factor scores are found, should they be based on the structure matrix (default) or the pattern matrix (oblique.scores=TRUE). Now it is always false. If you want oblique factor scores, use tenBerge. (See ?psych::fa)
+ }
  \item{timeout}{
 A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
 

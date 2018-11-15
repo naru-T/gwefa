@@ -1,5 +1,5 @@
 gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, robust, kernel, adaptive, p, theta, longlat, dMat,
-                                    vars,  n.obs = NA,fm, rotate,timeout) {
+                                    vars,  n.obs = NA,fm, rotate, oblique.scores, timeout) {
 
  ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
@@ -65,7 +65,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
   if (len.var > var.n)
     warning("Invalid variables have been specified, please check them again!")
 
-  temp0 <- fa(x,nfactors = k,fm=fm,rotate=rotate, scores=scores, residuals=T, timeout=timeout)
+  temp0 <- fa(x,nfactors = k,fm=fm,rotate=rotate, scores=scores, residuals=T, oblique.scores=oblique.scores, timeout=timeout)
 
   cv <- c()
   for (i in 1:ep.n) {
@@ -91,7 +91,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
       next
     }
 
-    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate,timeout=timeout)
+    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate,oblique.scores=oblique.scores, timeout=timeout)
     
     if(is.null(temp1)){  
       cv[i] <- NA

@@ -1,5 +1,5 @@
 gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, p, theta, longlat, dMat,
-                               vars, n.obs = NA,  fm, rotate,timeout) {
+                               vars, n.obs = NA,  fm, rotate, oblique.scores=FALSE, timeout) {
 
 ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
@@ -65,7 +65,11 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
   if (len.var > var.n)
     warning("Invalid variables have been specified, please check them again!")
 
-  temp0 <- fa(x,nfactors = k,fm=fm,scores=scores,  rotate=rotate, residuals=T)
+
+  temp0 <-  tryCatch({ R.utils::withTimeout( 
+    fa(x,nfactors = k,fm=fm,scores=scores,  rotate=rotate, residuals=T,oblique.scores=oblique.scores),
+    timeout=timeout)},
+    error=function(e){ NULL})
 
   cv <- c()
   for (i in 1:ep.n) {
@@ -91,7 +95,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
       next
     }
 
-    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate, timeout=timeout)
+    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate, oblique.scores=oblique.scores, timeout=timeout)
 
     if(is.null(temp1)){
       cv[i] <- NA

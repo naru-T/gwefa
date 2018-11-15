@@ -1,5 +1,5 @@
 bw_gwfa <- function(data, vars,k=2, scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat,
-                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"),timeout){
+                    n.obs = NA,fm, rotate, type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"),oblique.scores=FALSE, timeout){
 
   requireNamespace("GWmodel")
   requireNamespace("psych")
@@ -70,23 +70,23 @@ bw_gwfa <- function(data, vars,k=2, scores, robust=FALSE, kernel, adaptive=TRUE,
   if(type=="cv_uniquenesses"){
     bw <- gold(gwfa.cv_uniquenesses.calc, lower, upper, adapt.bw = adaptive, x,
                dp.locat, k, elocat=NULL, robust, kernel, adaptive, p, theta, longlat,
-               dMat, vars,fm=fm,rotate=rotate,scores=scores,timeout=timeout)
+               dMat, vars,fm=fm,rotate=rotate,scores=scores,oblique.scores=oblique.scores, timeout=timeout)
   } else if (type=="max_uniquenesses"){
     bw <- gold(gwfa_uniquenesses_sum, lower, upper, adapt.bw = adaptive, x,
                dp.locat, k, robust, kernel, adaptive, p, theta, longlat,
-               dMat, vars,fm=fm,rotate=rotate,scores=scores,timeout=timeout)
+               dMat, vars,fm=fm,rotate=rotate,scores=scores,oblique.scores=oblique.scores, timeout=timeout)
   } else if (type=="cv_score"){
     bw <- gold(gwfa_score_cv, lower, upper, adapt.bw = adaptive, x,
                dp.locat, k, elocat = NULL, robust, kernel, adaptive, p, theta, longlat,
-               dMat, vars,fm=fm,rotate=rotate,scores=scores,timeout=timeout)
+               dMat, vars,fm=fm,rotate=rotate,scores=scores,oblique.scores=oblique.scores,timeout=timeout)
   } else if (type=="residual_sum"){
     bw <- gold(gwfa_residual_sum, lower, upper, adapt.bw = adaptive, x,
                dp.locat, k,  robust, kernel, adaptive, p, theta, longlat,
-               dMat, vars,fm=fm,rotate=rotate,scores=scores,timeout=timeout)
+               dMat, vars,fm=fm,rotate=rotate,scores=scores,oblique.scores=oblique.scores,timeout=timeout)
   } else if (type=="accumvar_max"){
     bw <- gold(gwfa.Accumvar_max.calc, lower, upper, adapt.bw = adaptive, x,
                dp.locat, k,  robust, kernel, adaptive, p, theta, longlat,
-               dMat, vars,fm=fm,rotate=rotate,scores=scores,timeout=timeout)
+               dMat, vars,fm=fm,rotate=rotate,scores=scores,oblique.scores=oblique.scores,timeout=timeout)
   } else {bw <- NA }
 
   bw
