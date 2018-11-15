@@ -102,9 +102,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       next
     }
 
-    temp <- tryCatch({ R.utils::withTimeout(wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate),
-                                    timeout=timeout)},
-                     error=function(e){ NULL})
+    temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate, timeout=timeout)
     
     if(is.null(temp)){
       load[i,,] <- NA
