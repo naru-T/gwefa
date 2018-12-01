@@ -72,7 +72,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
 
   load <- array(NA,c(ep.n,var.n,k))
   resid_sqsum <- rep(NA, nrow(elocat))
-  s <- matrix(NA,ep.n,k)
+  s <- array(NA,c(ep.n,var.n,k))
   u <- matrix(NA,ep.n,var.n)
   ld <- matrix(NA,ep.n,k)
   ss <- matrix(NA,ep.n,k)
@@ -106,8 +106,8 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
     
     if(is.null(temp)){
       load[i,,] <- NA
-      score.all[use, ] <- NA
-      s[i,] <- NA
+      #score.all[use, ] <- NA
+      s[i,,] <- NA
       u[i,] <- NA
       ld[i,]<- NA
       ss[i,] <- NA
@@ -122,8 +122,9 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
     load[i,,] <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
     #score
 
-    score.all[use, ] <- temp$scores[, order(colnm)]
-    s[i,] <- score.all[i,]
+    #score.all[use, ] <- temp$scores[, order(colnm)]
+    #s[i,] <- score.all[i,]
+    s[i,,] <-  matrix(temp$scores[, order(colnm)],ncol=k, nrow=var.n)
     u[i,] <- temp$uniquenesses
     ld[i,]<- temp$Vaccounted[1,order(colnm)]
     ss[i,] <- temp$Vaccounted[2,order(colnm)]
