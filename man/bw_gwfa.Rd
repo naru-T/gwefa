@@ -9,7 +9,7 @@ A function for automatic bandwidth selection to calibrate a GWFA
 }
 \usage{
 bw_gwfa(data, vars,k=2,scores, robust=FALSE, kernel, adaptive=TRUE, p=2, theta=0, longlat=FALSE, dMat, n.obs = NA,fm, rotate, 
-type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"),oblique.scores, timeout)
+type = c("cv_score","cv_uniquenesses", "max_uniquenesses","residual_sum","accumvar_max"),oblique.scores, timeout, foreach, core)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -95,6 +95,14 @@ Five options are available.
 A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
 
 }
+  \item{foreach}{
+default:FALSE. If TRUE, foreach function works to implement calculation using multicores.
+
+}
+  \item{core}{
+Number of cores used for calculation. Default: NA. This is required when foreach is TRUE.
+}
+
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

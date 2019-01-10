@@ -11,7 +11,7 @@ This function finds the leave-one-out cross validation of uniquenesses to specif
 }
 \usage{
 gwfa_uniquenesses_cv(bw, x, dp.locat,k, scores, elocat=NULL, robust, kernel, adaptive,
-p, theta, longlat, dMat, vars,  n.obs = NA,fm, rotate, oblique.scores, timeout)
+p, theta, longlat, dMat, vars,  n.obs = NA,fm, rotate, oblique.scores, timeout, foreach, core)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -88,6 +88,13 @@ Same as psych::fa. "none", "varimax", "quartimax", "bentlerT", "equamax", "varim
  }
   \item{timeout}{
 A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
+}
+  \item{foreach}{
+default:FALSE. If TRUE, foreach function works to implement calculation using multicores.
+
+}
+  \item{core}{
+Number of cores used for calculation. Default: NA. This is required when foreach is TRUE.
 }
 
 }

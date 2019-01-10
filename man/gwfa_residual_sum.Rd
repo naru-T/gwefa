@@ -11,7 +11,7 @@ This function finds the sum of residuals for a specified bandwidth for GWFA. It 
 }
 \usage{
 gwfa_residual_sum(bw, x, dp.locat, k, robust, kernel, adaptive, 
-p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores, oblique.scores, timeout)
+p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores, oblique.scores, timeout, foreach, core)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -90,6 +90,14 @@ the default="regression" finds factor scores using regression. Alternatives for 
   \item{timeout}{
 A numeric specifying the maximum number of seconds the expression is allowed to run before being interrupted by the timeout. (See ?R.utils::wituTimeout)
 }
+  \item{foreach}{
+default:FALSE. If TRUE, foreach function works to implement calculation using multicores.
+
+}
+  \item{core}{
+Number of cores used for calculation. Default: NA. This is required when foreach is TRUE.
+}
+
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

@@ -1,9 +1,11 @@
 gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, p, theta, longlat, dMat,
-                               vars, n.obs = NA,  fm, rotate, oblique.scores=FALSE, timeout) {
+                               vars, n.obs = NA,  fm, rotate, oblique.scores=FALSE, timeout, foreach, core) {
 
 ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
   requireNamespace("psych")
+  requireNamespace("foreach")
+  requireNamespace("doMC")
 
   data <- x
   if (is(data, "Spatial")) {
@@ -71,6 +73,40 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
     timeout=timeout)},
     error=function(e){ NULL})
 
+  if(foreach==TRUE){
+        registerDoMC(core)
+        cv <- foreach(i= 1:ep.n, .combine = "cbind") %dopar% {
+          if (DM.given)
+            dist.vi <- dMat[, i]
+          else {
+            if (ep.given)
+              dist.vi <- gw.dist(dp.locat, elocat, focus = i,
+                                 p, theta, longlat)
+            else dist.vi <- gw.dist(dp.locat, focus = i, p = p,
+                                    theta = theta, longlat = longlat)
+          }
+          wt <- gw.weight(dist.vi, bw, kernel, adaptive)
+          use <- wt > 0
+          wt[i] <- 0
+          wt <- wt[use]
+          if (length(wt) <= 5) {
+            expr <- paste("Too small bandwidth at location: ",
+                          i)
+            warning(paste(expr, "and the results can't be given there.",
+                          sep = ", "))
+            next
+          }
+          
+          temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate, oblique.scores=oblique.scores, timeout=timeout)
+          
+          if(is.null(temp1)){
+             NA
+          } else{
+             sum((temp0$scores[i, ] - temp1$scores[i, ]))**2
+          }
+        }
+      
+  } else{
   cv <- c()
   for (i in 1:ep.n) {
 
@@ -102,6 +138,10 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
     } else{
       cv[i] <- sum((temp0$scores[i, ] - temp1$scores[i, ]))**2
       }
+    }
   }
+  
   sum(cv)
-}
+  
+  }
+
