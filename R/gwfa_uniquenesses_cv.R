@@ -142,5 +142,6 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
     }
     }
   }
-  sum(cv)
+  #sum(cv)
+  mean(cv,na.rm = TRUE)
 }
