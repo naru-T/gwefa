@@ -141,7 +141,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
     }
   }
   
-  mean(cv, na.rm = TRUE)
+  mean(cv %>% as.numeric(), na.rm = TRUE)
   
   }
 
