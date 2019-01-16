@@ -11,7 +11,8 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
   requireNamespace("psych")
   requireNamespace("R.utils")
   requireNamespace("foreach")
-  requireNamespace("doMC")
+  #requireNamespace("doMC")
+  requireNamespace("doParallel")
 
   if (is(data, "Spatial")) {
     p4s <- proj4string(data)
@@ -73,8 +74,8 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
     warning("Invalid variables have been specified, please check them again!")
 
   if(foreach == TRUE){
-    
-    #registerDoMC(core)
+    cl <- makePSOCKcluster(core)
+    registerDoParallel(cl = cl,cores = core)
     out <- foreach(i= 1:ep.n) %dopar% {
       #for (i in 1:ep.n) {
       
@@ -115,6 +116,8 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
         resid_sqsum <- NA
         rmsea <- NA
         
+      stopImplicitCluster(cl)
+      
       } else {
         
         colnm <- colnames(temp$scores)
