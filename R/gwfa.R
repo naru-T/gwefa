@@ -116,8 +116,6 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
         resid_sqsum <- NA
         rmsea <- NA
         
-        stopCluster(cl)
-        
       } else {
         
         colnm <- colnames(temp$scores)
@@ -159,6 +157,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       rmsea = t(sapply(out,"[[","rmsea")) %>% as.numeric()
     )
     
+    stopCluster(cl)
     
   } else{
   load <- array(NA,c(ep.n,var.n,k))
