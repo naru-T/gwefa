@@ -5,8 +5,9 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
   requireNamespace("GWmodel")
   requireNamespace("psych")
   requireNamespace("foreach")
-  requireNamespace("doMC")
-
+  #requireNamespace("doMC")
+  requireNamespace("doParallel")
+  
   data <- x
   if (is(data, "Spatial")) {
     p4s <- proj4string(data)
@@ -74,7 +75,9 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
     error=function(e){ NULL})
 
   if(foreach==TRUE){
-        registerDoMC(core)
+    cl <- makePSOCKcluster(core)
+    registerDoParallel(cl = cl,cores = core)
+    
         cv <- foreach(i= 1:ep.n, .combine = "cbind") %dopar% {
           if (DM.given)
             dist.vi <- dMat[, i]
@@ -105,7 +108,8 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
              sum((temp0$scores[i, ] - temp1$scores[i, ]))**2
           }
         }
-      
+        stopCluster(cl)
+        
   } else{
   cv <- c()
   for (i in 1:ep.n) {

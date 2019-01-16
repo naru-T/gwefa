@@ -4,8 +4,9 @@ bw_gwfa <- function(data, vars,k=2, scores, robust=FALSE, kernel, adaptive=TRUE,
   requireNamespace("GWmodel")
   requireNamespace("psych")
   requireNamespace("foreach")
-  requireNamespace("doMC")
-  
+  #requireNamespace("doMC")
+  requireNamespace("doParallel")
+
 
   x <- data
   if (is(data, "Spatial")) {

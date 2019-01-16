@@ -5,7 +5,8 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
   requireNamespace("GWmodel")
   requireNamespace("psych")
   requireNamespace("foreach")
-  requireNamespace("doMC")
+  #requireNamespace("doMC")
+  requireNamespace("doParallel")
   
 
   data <- x
@@ -75,7 +76,9 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
     error=function(e){ NULL})
   
   if(foreach==TRUE){
-    registerDoMC(core)
+    cl <- makePSOCKcluster(core)
+    registerDoParallel(cl = cl,cores = core)
+    
     cv <- foreach(i= 1:ep.n, .combine = "cbind") %dopar% {
       if (DM.given)
         dist.vi <- dMat[, i]
@@ -106,7 +109,9 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
          sum((temp0$uniquenesses - temp1$uniquenesses))**2
       }
     }
-      
+    
+    stopCluster(cl)
+    
   } else{
   
   cv <- c()

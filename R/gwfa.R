@@ -116,8 +116,8 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
         resid_sqsum <- NA
         rmsea <- NA
         
-      stopImplicitCluster(cl)
-      
+        stopCluster(cl)
+        
       } else {
         
         colnm <- colnames(temp$scores)
