@@ -74,7 +74,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
 
   if(foreach == TRUE){
     
-    registerDoMC(core)
+    #registerDoMC(core)
     out <- foreach(i= 1:ep.n) %dopar% {
       #for (i in 1:ep.n) {
       
@@ -141,6 +141,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
         ss=ss,
         cor.mt=cor.mt,
         rmsea=rmsea)
+      
     }
     
     res <- list(
