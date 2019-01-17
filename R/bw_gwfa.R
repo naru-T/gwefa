@@ -44,7 +44,7 @@ bw_gwfa <- function(data, vars,k=2, scores, robust=FALSE, kernel, adaptive=TRUE,
   var.n <- ncol(data)
   if (adaptive) {
     upper <- dp.n
-    lower <- dp.n/3 ##chenged from 2 to dp.n/3
+    lower <- dp.n/4 ##chenged from 2 to dp.n/4
   }
   else {
     if (DM.given) {

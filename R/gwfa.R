@@ -105,14 +105,14 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       
       
       if(is.null(temp)){
-        load <- NA
-        score.all <- NA
-        s <- NA
-        u <- NA
-        ld<- NA
-        ss <- NA
-        cortemp <- NA
-        cor.mt <- NA
+        load <- matrix(NA, ncol=k, nrow=var.n)
+        #score.all <- matrix(NA, ncol=k, nrow=dp.n)
+        s <- rep(NA, k)
+        u <- rep(NA, var.n)
+        ld<- rep(NA, k)
+        ss <- rep(NA, k)
+        #cortemp <- NA
+        cor.mt <- rep(NA, gamma(k))
         resid_sqsum <- NA
         rmsea <- NA
         
@@ -195,14 +195,14 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
     temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
     
     if(is.null(temp)){
-      load[i,,] <- NA
-      score.all[use, ] <- NA
-      s[i,] <- NA
-      u[i,] <- NA
-      ld[i,]<- NA
-      ss[i,] <- NA
-      cortemp <- NA
-      cor.mt[i,] <- NA
+      load[i,,] <- matrix(NA, ncol=k, nrow=var.n)
+      score.all[use, ] <- rep(NA, k)
+      #s[i,] <- NA
+      u[i,] <- rep(NA, var.n)
+      ld[i,]<- rep(NA, k)
+      ss[i,] <- rep(NA, k)
+      #cortemp <- NA
+      cor.mt[i,] <- rep(NA, gamma(k))
       resid_sqsum[i] <- NA
       rmsea[i] <- NA
 
