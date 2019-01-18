@@ -103,11 +103,16 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
           temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate, oblique.scores=oblique.scores, timeout=timeout)
           
           if(is.null(temp1)){
-             NA
+          out <-  NA
           } else{
-             sum((temp0$scores[i, ] - temp1$scores[i, ]))**2
+          out <-   tryCatch({ sum((temp0$scores[i, ] - temp1$scores[i, ]))**2 },
+                     error=function(e){ NA})
           }
+          
+          return(out)
+          
         }
+        
         stopCluster(cl)
         
   } else{

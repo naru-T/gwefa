@@ -74,76 +74,84 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
     warning("Invalid variables have been specified, please check them again!")
 
   if(foreach == TRUE){
-    cl <- makePSOCKcluster(core)
-    registerDoParallel(cl = cl,cores = core)
-    out <- foreach(i= 1:ep.n) %dopar% {
-      #for (i in 1:ep.n) {
-      
-      score.all <-  matrix(NA,ep.n,k)
-      
-      if (DM.given)
-        dist.vi <- dMat[, i]
-      else {
-        if (ep.given)
-          dist.vi <- gw.dist(dp.locat, elocat, focus = i,
-                             p, theta, longlat)
-        else dist.vi <- gw.dist(dp.locat, focus = i, p = p,
-                                theta = theta, longlat = longlat)
-      }
-      wt <- gw.weight(dist.vi, bw, kernel, adaptive)
-      use <- wt > 0
-      wt <- wt[use]
-      if (length(wt) <= 5) {
-        expr <- paste("Too small bandwidth at location: ",
-                      i)
-        warning(paste(expr, "and the results can't be given there.",
-                      sep = ", "))
-        next
-      }
-      
-      temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
-      
-      
-      if(is.null(temp)){
-        load <- matrix(NA, ncol=k, nrow=var.n)
-        #score.all <- matrix(NA, ncol=k, nrow=dp.n)
-        s <- rep(NA, k)
-        u <- rep(NA, var.n)
-        ld<- rep(NA, k)
-        ss <- rep(NA, k)
-        #cortemp <- NA
-        cor.mt <- rep(NA, gamma(k))
-        resid_sqsum <- NA
-        rmsea <- NA
+    
+    #https://qiita.com/hoxo_m/items/f08b015bc9897d98775d
+    ExecuteParallelProcess <- function() {
+      cl <- makeCluster(detectCores())
+      registerDoParallel(cl)
+      on.exit(stopCluster(cl)) 
+      out <- foreach(i= 1:ep.n) %dopar% {
+        #for (i in 1:ep.n) {
         
-      } else {
+        score.all <-  matrix(NA,ep.n,k)
         
-        colnm <- colnames(temp$scores)
-        load <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
-        #score
+        if (DM.given)
+          dist.vi <- dMat[, i]
+        else {
+          if (ep.given)
+            dist.vi <- gw.dist(dp.locat, elocat, focus = i,
+                               p, theta, longlat)
+          else dist.vi <- gw.dist(dp.locat, focus = i, p = p,
+                                  theta = theta, longlat = longlat)
+        }
+        wt <- gw.weight(dist.vi, bw, kernel, adaptive)
+        use <- wt > 0
+        wt <- wt[use]
+        if (length(wt) <= 5) {
+          expr <- paste("Too small bandwidth at location: ",
+                        i)
+          warning(paste(expr, "and the results can't be given there.",
+                        sep = ", "))
+          next
+        }
         
-        score.all[use, ] <- temp$scores[, order(colnm)]
-        s <- score.all[i,]
-        u <- temp$uniquenesses
-        ld<- temp$Vaccounted[1,order(colnm)]
-        ss <- temp$Vaccounted[2,order(colnm)]
-        cortemp <- cor(temp$scores[,order(colnm)])
-        cor.mt <- cortemp[upper.tri(cortemp)] #correlation between factor scores
-        resid_sqsum <- sum(temp$residual[upper.tri(temp$residual)]^2, na.rm=TRUE)
-        rmsea <- temp$RMSEA[1]
+        temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
+        
+        
+        if(is.null(temp)){
+          load <- matrix(NA, ncol=k, nrow=var.n)
+          #score.all <- matrix(NA, ncol=k, nrow=dp.n)
+          s <- rep(NA, k)
+          u <- rep(NA, var.n)
+          ld<- rep(NA, k)
+          ss <- rep(NA, k)
+          #cortemp <- NA
+          cor.mt <- rep(NA, gamma(k))
+          resid_sqsum <- NA
+          rmsea <- NA
+          
+        } else {
+          
+          colnm <- colnames(temp$scores)
+          load <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
+          #score
+          
+          score.all[use, ] <- temp$scores[, order(colnm)]
+          s <- score.all[i,]
+          u <- temp$uniquenesses
+          ld<- temp$Vaccounted[1,order(colnm)]
+          ss <- temp$Vaccounted[2,order(colnm)]
+          cortemp <- cor(temp$scores[,order(colnm)])
+          cor.mt <- cortemp[upper.tri(cortemp)] #correlation between factor scores
+          resid_sqsum <- sum(temp$residual[upper.tri(temp$residual)]^2, na.rm=TRUE)
+          rmsea <- temp$RMSEA[1]
+        }
+        
+        list(
+          loadings=load,
+          score=s,
+          uniquenesses=u,
+          loading_score=ld,
+          residuals_sqsum = resid_sqsum,
+          ss=ss,
+          cor.mt=cor.mt,
+          rmsea=rmsea)
+        
       }
-      
-      list(
-        loadings=load,
-        score=s,
-        uniquenesses=u,
-        loading_score=ld,
-        residuals_sqsum = resid_sqsum,
-        ss=ss,
-        cor.mt=cor.mt,
-        rmsea=rmsea)
-      
+    
     }
+    
+    ExecuteParallelProcess()
     
     res <- list(
       # loadings = lapply(out,"[[","loadings") %>% unlist()
@@ -156,8 +164,6 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       cor.mt = t(sapply(out,"[[","cor.mt")),
       rmsea = t(sapply(out,"[[","rmsea")) %>% as.numeric()
     )
-    
-    stopCluster(cl)
     
   } else{
   load <- array(NA,c(ep.n,var.n,k))

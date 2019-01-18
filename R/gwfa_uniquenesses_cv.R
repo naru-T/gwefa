@@ -76,41 +76,50 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
     error=function(e){ NULL})
   
   if(foreach==TRUE){
-    cl <- makePSOCKcluster(core)
-    registerDoParallel(cl = cl,cores = core)
     
-    cv <- foreach(i= 1:ep.n, .combine = "cbind") %dopar% {
-      if (DM.given)
-        dist.vi <- dMat[, i]
-      else {
-        if (ep.given)
-          dist.vi <- gw.dist(dp.locat, elocat, focus = i,
-                             p, theta, longlat)
-        else dist.vi <- gw.dist(dp.locat, focus = i, p = p,
-                                theta = theta, longlat = longlat)
-      }
-      wt <- gw.weight(dist.vi, bw, kernel, adaptive)
-      wt[i] <- 0
-      use <- wt > 0
-      wt <- wt[use]
-      if (length(wt) <= 5) {
-        expr <- paste("Too small bandwidth at location: ",
-                      i)
-        warning(paste(expr, "and the results can't be given there.",
-                      sep = ", "))
-        next
+    #https://qiita.com/hoxo_m/items/f08b015bc9897d98775d
+    ExecuteParallelProcess <- function() {
+      cl <- makeCluster(detectCores())
+      registerDoParallel(cl)
+      on.exit(stopCluster(cl)) 
+      
+      cv <- foreach(i= 1:ep.n, .combine = "cbind") %dopar% {
+        if (DM.given)
+          dist.vi <- dMat[, i]
+        else {
+          if (ep.given)
+            dist.vi <- gw.dist(dp.locat, elocat, focus = i,
+                               p, theta, longlat)
+          else dist.vi <- gw.dist(dp.locat, focus = i, p = p,
+                                  theta = theta, longlat = longlat)
+        }
+        wt <- gw.weight(dist.vi, bw, kernel, adaptive)
+        wt[i] <- 0
+        use <- wt > 0
+        wt <- wt[use]
+        if (length(wt) <= 5) {
+          expr <- paste("Too small bandwidth at location: ",
+                        i)
+          warning(paste(expr, "and the results can't be given there.",
+                        sep = ", "))
+          next
+        }
+        
+        temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate,oblique.scores=oblique.scores, timeout=timeout)
+        
+        if(is.null(temp1)){  
+          out <-  NA
+        } else{
+          out <- tryCatch({ sum((temp0$uniquenesses - temp1$uniquenesses))**2 },
+                          error=function(e){NA})
+        }
+        
+        return(out)
       }
       
-      temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate,oblique.scores=oblique.scores, timeout=timeout)
-      
-      if(is.null(temp1)){  
-         NA
-      } else{
-         sum((temp0$uniquenesses - temp1$uniquenesses))**2
-      }
     }
     
-    stopCluster(cl)
+    ExecuteParallelProcess()
     
   } else{
   
