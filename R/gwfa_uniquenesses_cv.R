@@ -78,7 +78,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
   if(foreach==TRUE){
     
     #https://qiita.com/hoxo_m/items/f08b015bc9897d98775d
-    ExecuteParallelProcess <- function() {
+    ExecuteParallelProcess <- function(...) {
       cl <- makeCluster(detectCores())
       registerDoParallel(cl)
       on.exit(stopCluster(cl)) 
