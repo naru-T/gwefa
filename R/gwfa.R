@@ -75,11 +75,9 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
 
   if(foreach == TRUE){
     
-    #https://qiita.com/hoxo_m/items/f08b015bc9897d98775d
-    ExecuteParallelProcess <- function() {
       cl <- makeCluster(detectCores())
       registerDoParallel(cl)
-      on.exit(stopCluster(cl)) 
+       
       out <- foreach(i= 1:ep.n) %dopar% {
         #for (i in 1:ep.n) {
         
@@ -148,10 +146,10 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
           rmsea=rmsea)
         
       }
-    
+      
+      stopCluster(cl)
     }
     
-    ExecuteParallelProcess()
     
     res <- list(
       # loadings = lapply(out,"[[","loadings") %>% unlist()

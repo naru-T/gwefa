@@ -75,6 +75,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
     error=function(e){ NULL})
 
   if(foreach==TRUE){
+    
     cl <- makePSOCKcluster(core)
     registerDoParallel(cl = cl,cores = core)
     
