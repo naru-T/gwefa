@@ -115,7 +115,6 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
       }
       
       stopCluster(cl)
-    }
     
   } else{
   
