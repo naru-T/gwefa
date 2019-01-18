@@ -148,8 +148,6 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       }
       
       stopCluster(cl)
-    }
-    
     
     res <- list(
       # loadings = lapply(out,"[[","loadings") %>% unlist()
