@@ -115,7 +115,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
       
       stopCluster(cl)
     
-  } else {
+  }else{
   
   cv <- c()
   for (i in 1:ep.n) {
@@ -148,7 +148,8 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
     } else{
     cv[i] <- sum((temp0$uniquenesses - temp1$uniquenesses))**2
     }
-    }
+  }
+  
   }
   #sum(cv)
   cv %>% as.numeric() %>% mean(.,na.rm=TRUE)
