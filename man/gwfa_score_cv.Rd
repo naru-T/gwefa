@@ -11,7 +11,7 @@ This function finds the leave-one-out cross validation of scores to specify band
 }
 \usage{
 gwfa_score_cv(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, 
-p, theta, longlat, dMat, vars, n.obs = NA,  fm, rotate, oblique.scores, timeout, foreach, core)
+p, theta, longlat, dMat, vars, n.obs = NA,  fm, rotate, oblique.scores, timeout, foreach)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -92,9 +92,6 @@ A numeric specifying the maximum number of seconds the expression is allowed to 
   \item{foreach}{
 default:FALSE. If TRUE, foreach function works to implement calculation using multicores.
 
-}
-  \item{core}{
-Number of cores used for calculation. Default: NA. This is required when foreach is TRUE.
 }
 
 }

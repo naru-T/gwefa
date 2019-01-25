@@ -3,7 +3,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
                   residuals=FALSE, SMC=TRUE, covar=FALSE,missing=FALSE,impute="median",
                   min.err = 0.001,  max.iter = 50,symmetric=TRUE, warnings=TRUE, fm="minres",
                   alpha=.1,pr=.05,oblique.scores=FALSE,np.obs=NULL,use="pairwise",cor="cor",
-                  correct=.5,weight=NULL, timeout, foreach=FALSE, core=NA, ...) {
+                  correct=.5,weight=NULL, timeout, foreach=FALSE, ...) {
 
 
 ##This function is based on GWmodel::gwpca and psych::fa

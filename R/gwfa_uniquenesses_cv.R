@@ -1,5 +1,5 @@
 gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, robust, kernel, adaptive, p, theta, longlat, dMat,
-                                    vars,  n.obs = NA,fm, rotate, oblique.scores, timeout, foreach, core) {
+                                    vars,  n.obs = NA,fm, rotate, oblique.scores, timeout, foreach) {
 
  ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
@@ -75,7 +75,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
     timeout=timeout)},
     error=function(e){ NULL})
   
-  if(foreach==TRUE){
+  if(foreach==TRUE) {
     
       cl <- makeCluster(detectCores())
       registerDoParallel(cl)
@@ -116,7 +116,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
       
       stopCluster(cl)
     
-  } else{
+  } else {
   
   cv <- c()
   for (i in 1:ep.n) {

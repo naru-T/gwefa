@@ -1,5 +1,5 @@
 gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kernel, adaptive=TRUE, p, theta, longlat, dMat,
-                               vars, n.obs = NA,  fm, rotate, oblique.scores=FALSE, timeout, foreach, core) {
+                               vars, n.obs = NA,  fm, rotate, oblique.scores=FALSE, timeout, foreach) {
 
 ##This function is based on GWmodel::gwpca.cv.
   requireNamespace("GWmodel")
@@ -76,8 +76,8 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
 
   if(foreach==TRUE){
     
-    cl <- makePSOCKcluster(core)
-    registerDoParallel(cl = cl,cores = core)
+    cl <- makeCluster(detectCores())
+    registerDoParallel(cl)
     
         cv <- foreach(i= 1:ep.n, .combine = "cbind") %dopar% {
           if (DM.given)

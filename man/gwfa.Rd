@@ -13,7 +13,7 @@ gwfa(data, elocat, vars, bw, k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=F
                   residuals=FALSE, SMC=TRUE, covar=FALSE,missing=FALSE,impute="median",
                   min.err = 0.001,  max.iter = 50,symmetric=TRUE, warnings=TRUE, fm="minres",
                   alpha=.1,pr=.05,oblique.scores=FALSE,np.obs=NULL,use="pairwise",cor="cor",
-                  correct=.5,weight=NULL,timeout,foreach, core,...)
+                  correct=.5,weight=NULL,timeout,foreach,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -167,9 +167,6 @@ A numeric specifying the maximum number of seconds the expression is allowed to 
   \item{foreach}{
 default:FALSE. If TRUE, foreach function works to implement calculation using multicores.
 
-}
-  \item{core}{
-Number of cores used for calculation. Default: NA. This is required when foreach is TRUE.
 }
 
 

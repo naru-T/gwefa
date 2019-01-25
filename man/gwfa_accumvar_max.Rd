@@ -11,7 +11,7 @@ This function finds the maximum of the minimum accumulated variation for a speci
 }
 \usage{
 gwfa.Accumvar_max.calc(bw, x, dp.locat, k, robust, kernel, adaptive,
-p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores, oblique.scores, timeout, foreach, core)
+p, theta, longlat, dMat, vars, n.obs, fm, rotate, scores, oblique.scores, timeout, foreach)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -95,10 +95,6 @@ A numeric specifying the maximum number of seconds the expression is allowed to 
 default:FALSE. If TRUE, foreach function works to implement calculation using multicores.
 
 }
-  \item{core}{
-Number of cores used for calculation. Default: NA. This is required when foreach is TRUE.
-}
-
 
 }
 \details{
