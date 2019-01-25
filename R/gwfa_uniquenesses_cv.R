@@ -106,12 +106,11 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
         
         if(is.null(temp1)){  
           out <-  NA
-        } else{
+        } else {
           out <- tryCatch({ sum((temp0$uniquenesses - temp1$uniquenesses))**2 },
                           error=function(e){NA})
         }
         
-        return(out)
       }
       
       stopCluster(cl)

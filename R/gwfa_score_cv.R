@@ -110,8 +110,6 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
                      error=function(e){ NA})
           }
           
-          return(out)
-          
         }
         
         stopCluster(cl)
