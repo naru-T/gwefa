@@ -70,7 +70,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
 
 
   temp0 <-  tryCatch({ R.utils::withTimeout( 
-    fa(x,nfactors = k,fm=fm,scores=scores,  rotate=rotate, residuals=T,oblique.scores=oblique.scores),
+    fa(x,nfactors = k,n.obs = n.obs, fm=fm,scores=scores,  rotate=rotate, residuals=T,oblique.scores=oblique.scores),
     timeout=timeout)},
     error=function(e){ NULL})
 
@@ -101,7 +101,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
             next
           }
           
-          temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate, oblique.scores=oblique.scores, timeout=timeout)
+          temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs = n.obs, fm, rotate, oblique.scores=oblique.scores, timeout=timeout)
           
           if(is.null(temp1)){
           out <-  NA
@@ -139,7 +139,7 @@ gwfa_score_cv <- function(bw, x, dp.locat,k, robust, scores,  elocat=NULL, kerne
       next
     }
 
-    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs, fm, rotate, oblique.scores=oblique.scores, timeout=timeout)
+    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs = n.obs, fm, rotate, oblique.scores=oblique.scores, timeout=timeout)
 
     if(is.null(temp1)){
       cv[i] <- NA
