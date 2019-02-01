@@ -103,7 +103,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
           next
         }
         
-        temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
+        temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs = length(wt), fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
         
         
         if(is.null(temp)){
@@ -194,7 +194,7 @@ gwfa <- function(data,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0, 
       next
     }
 
-    temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs, fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
+    temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs = length(wt), fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
     
     if(is.null(temp)){
       load[i,,] <- matrix(NA, ncol=k, nrow=var.n)

@@ -71,7 +71,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
 
   temp0 <- tryCatch({ R.utils::withTimeout( 
     fa(x %>% data.frame() %>% 
-         dplyr::select(vars) ,nfactors=k, n.obs = n.obs, fm=fm,rotate=rotate, scores=scores, oblique.scores=oblique.scores, residuals=T),
+         dplyr::select(vars) ,nfactors=k, n.obs = nrow(x), fm=fm,rotate=rotate, scores=scores, oblique.scores=oblique.scores, residuals=T),
     timeout=timeout)},
     error=function(e){ NULL})
   
@@ -102,7 +102,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
           next
         }
         
-        temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs = n.obs, fm, rotate,oblique.scores=oblique.scores, timeout=timeout)
+        temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs = length(wt), fm, rotate,oblique.scores=oblique.scores, timeout=timeout)
         
         if(is.null(temp1)){  
           out <-  NA
@@ -141,7 +141,7 @@ gwfa.cv_uniquenesses.calc <- function(bw, x, dp.locat,k, scores, elocat=NULL, ro
       next
     }
 
-    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs = n.obs, fm, rotate,oblique.scores=oblique.scores, timeout=timeout)
+    temp1 <- wfa(x=data, wt, factors=k, scores=scores, n.obs = length(wt), fm, rotate,oblique.scores=oblique.scores, timeout=timeout)
     
     if(is.null(temp1)){  
       cv[i] <- NA
