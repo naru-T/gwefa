@@ -13,7 +13,7 @@ gwfa(data, elocat, vars, bw, k=2, kernel, adaptive=TRUE, p=2, theta=0, longlat=F
                   residuals=FALSE, SMC=TRUE, covar=FALSE,missing=FALSE,impute="median",
                   min.err = 0.001,  max.iter = 50,symmetric=TRUE, warnings=TRUE, fm="minres",
                   alpha=.1,pr=.05,oblique.scores=FALSE,np.obs=NULL,use="pairwise",cor="cor",
-                  correct=.5,weight=NULL,timeout,foreach,...)
+                  correct=.5,weight=NULL,timeout,foreach, organize=FALSE...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -169,6 +169,10 @@ default:FALSE. If TRUE, foreach function works to implement calculation using mu
 
 }
 
+  \item{organize}{
+default:FALSE.if TRUE, factor loadings and scores and associated outputs are reordered as factor names. see: https://stats.stackexchange.com/a/169991
+
+}
 
   \item{...}{
 Same as psych::fa. Additional parameters, specifically, keys may be passed if using the target rotation, or delta if using geominQ, or whether to normalize if using Varimax
