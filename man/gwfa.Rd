@@ -170,7 +170,7 @@ default:FALSE. If TRUE, foreach function works to implement calculation using mu
 }
 
   \item{organize}{
-default:FALSE.if TRUE, factor loadings and scores and associated outputs are reordered as factor names. see: https://stats.stackexchange.com/a/169991
+default:FALSE.if TRUE, ordering factor loadings and scores are based on the similarity of conventional FA. mean absolute biases (MAB) between loadings from local fa and conventional fa are calculated and the minimum MAB is used for the matching. if FALSE, pre-rotated order is used for ordering factors and associated outputs are reordered as factor names. see: https://stats.stackexchange.com/a/169991
 
 }
 

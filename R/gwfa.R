@@ -14,6 +14,8 @@ gwfa <- function(sdata,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
   #requireNamespace("doMC")
   requireNamespace("doParallel")
 
+  mae <- function(x){sum(abs(x)/length(x))}
+  
   if (is(sdata, "Spatial")) {
     p4s <- proj4string(sdata)
     dp.locat <- coordinates(sdata)
@@ -74,6 +76,11 @@ gwfa <- function(sdata,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
   if (len.var > var.n)
     warning("Invalid variables have been specified, please check them again!")
 
+  
+  if(organize==TRUE){
+    fit.fa <- psych::fa(r=data, nfactors=k, scores=scores, fm=fm, rotate=rotate, oblique.scores=oblique.scores)
+  }
+  
   if(foreach == TRUE){
     
       cl <- makeCluster(detectCores())
@@ -88,12 +95,12 @@ gwfa <- function(sdata,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
           dist.vi <- dMat[, i]
         else {
           if (ep.given)
-            dist.vi <- gw.dist(dp.locat, elocat, focus = i,
+            dist.vi <- GWmodel::gw.dist(dp.locat, elocat, focus = i,
                                p, theta, longlat)
-          else dist.vi <- gw.dist(dp.locat, focus = i, p = p,
+          else dist.vi <- GWmodel::gw.dist(dp.locat, focus = i, p = p,
                                   theta = theta, longlat = longlat)
         }
-        wt <- gw.weight(dist.vi, bw, kernel, adaptive)
+        wt <- GWmodel::gw.weight(dist.vi, bw, kernel, adaptive)
         use <- wt > 0
         wt <- wt[use]
         if (length(wt) <= 5) {
@@ -104,7 +111,7 @@ gwfa <- function(sdata,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
           next
         }
         
-        temp <- wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs = length(wt), fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
+        temp <- gwefa::wfa(x=data[use, ], wt, factors=k, scores=scores, n.obs = length(wt), fm=fm, rotate=rotate, oblique.scores=oblique.scores, timeout=timeout)
         
         
         if(is.null(temp)){
@@ -122,20 +129,18 @@ gwfa <- function(sdata,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
         } else {
           
           if(organize==TRUE){
-            load <- matrix(temp$loadings, ncol=k, nrow=var.n)
-            score.all[use, ] <- temp$scores
-            ld<- temp$Vaccounted[1, ]
-            ss <- temp$Vaccounted[2, ]
-            cortemp <- cor(temp$scores)
+            
+            colnm <- sapply( 1:k, function(x){apply((fit.fa$loadings - temp$loadings[,x]),2,mae) %>% which.min()})
+            
           }else{
-            colnm <- colnames(temp$scores)
-            load <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
-            score.all[use, ] <- temp$scores[, order(colnm)]
-            ld<- temp$Vaccounted[1,order(colnm)]
-            ss <- temp$Vaccounted[2,order(colnm)]
-            cortemp <- cor(temp$scores[,order(colnm)])
+            colnm <- colnames(temp$scores) 
           }
           
+          load <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
+          score.all[use, ] <- temp$scores[, order(colnm)]
+          ld<- temp$Vaccounted[1,order(colnm)]
+          ss <- temp$Vaccounted[2,order(colnm)]
+          cortemp <- cor(temp$scores[,order(colnm)])
           s <- score.all[i,]
           u <- temp$uniquenesses
           cor.mt <- cortemp[upper.tri(cortemp)] #correlation between factor scores
@@ -222,39 +227,28 @@ gwfa <- function(sdata,elocat, vars,bw,k=2, kernel, adaptive=TRUE, p=2, theta=0,
     } else {
 
       if(organize==TRUE){
-        load <- matrix(temp$loadings, ncol=k, nrow=var.n)
-        score.all[use, ] <- temp$scores
-        ld<- temp$Vaccounted[1, ]
-        ss <- temp$Vaccounted[2, ]
-        cortemp <- cor(temp$scores)
+        
+        colnm <- sapply( 1:k, function(x){apply((fit.fa$loadings - temp$loadings[,x]),2,mae) %>% which.min()})
+        
       }else{
-        colnm <- colnames(temp$scores)
-        load <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
-        score.all[use, ] <- temp$scores[, order(colnm)]
-        ld<- temp$Vaccounted[1,order(colnm)]
-        ss <- temp$Vaccounted[2,order(colnm)]
-        cortemp <- cor(temp$scores[,order(colnm)])
+        colnm <- colnames(temp$scores) 
       }
       
-      s <- score.all[i,]
-      u <- temp$uniquenesses
-      cor.mt <- cortemp[upper.tri(cortemp)] #correlation between factor scores
-      resid_sqsum <- sum(temp$residual[upper.tri(temp$residual)]^2, na.rm=TRUE)
-      rmsea <- temp$RMSEA[1]
+      
+      load[i,,] <- matrix(temp$loadings[, order(colnm)], ncol=k, nrow=var.n)
+      score.all[use, ] <- temp$scores[, order(colnm)]
+      s[i,] <- score.all[i,]
+      u[i,] <- temp$uniquenesses
+      ld[i,]<- temp$Vaccounted[1,order(colnm)]
+      ss[i,] <- temp$Vaccounted[2,order(colnm)]
+      cortemp <- cor(temp$scores[,order(colnm)])
+      cor.mt[i,] <- cortemp[upper.tri(cortemp)] #correlation between factor scores
+      resid_sqsum[i] <- sum(temp$residual[upper.tri(temp$residual)]^2, na.rm=TRUE)
+      rmsea[i] <- temp$RMSEA[1]
+      
     }
   }
   dimnames(load)[[3]] <- colnames(temp$loadings)[order(colnames(temp$loadings))]
-  
-  
-  dat <- data.frame(
-    loadings=load,
-    score=s,
-    uniquenesses=u,
-    loading_score=ld,
-    residuals_sqsum = resid_sqsum,
-    ss=ss,
-    cor.mt=cor.mt,
-    rmsea=rmsea)
   
   
  res <- list(
